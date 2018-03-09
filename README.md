@@ -1,0 +1,2 @@
+# Thumnail Analyzer
+YouTubers love to add their face to their thumbnails. This script detects various face emotions from thumbnails of a particular channel which can be used to find interesting patterns.
