@@ -3,16 +3,22 @@ import csv
 import json
 import config
 
-likelihood = {"UNKNOWN": 0,
-              "VERY_UNLIKELY": 0,
-              "UNLIKELY": 2,
-              "POSSIBLE": 10,
-              "LIKELY": 20,
-              "VERY_LIKELY": 100
-              }
+face_api_url = 'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect'
+
+headers = {'Ocp-Apim-Subscription-Key': config.emotionAPI}
+
+params = {
+    'returnFaceId': 'true',
+    'returnFaceLandmarks': 'false',
+    'returnFaceAttributes': 'emotion',
+}
+
+cId = {"chris": "UCCqEeDAUf4Mg0GgEN658tkA",
+       "needledrop": "UCt7fwAhXDy3oNFTAzF2o8Pw"
+       }
 
 payload = {"type": "video",
-           "channelId": "UCCqEeDAUf4Mg0GgEN658tkA",
+           "channelId": cId["needledrop"],
            "order": "date",
            "maxResults": 50,
            "part": "snippet",
@@ -21,22 +27,22 @@ payload = {"type": "video",
            }
 
 post_json_body = {
-                "requests": [
-                    {
-                        "image": {
-                            "source": {
-                                "imageUri": ""
-                            }
-                        },
-                        "features": [
-                            {
-                                "type": "FACE_DETECTION",
-                                "maxResults": 1
-                            }
-                        ]
-                    }
-                ]
-            }
+    "requests": [
+        {
+            "image": {
+                "source": {
+                    "imageUri": ""
+                }
+            },
+            "features": [
+                {
+                    "type": "FACE_DETECTION",
+                    "maxResults": 1
+                }
+            ]
+        }
+    ]
+}
 
 with open("results.csv", "wb") as csvfile:
     writer = csv.writer(csvfile, delimiter=',')
@@ -52,23 +58,24 @@ with open("results.csv", "wb") as csvfile:
 
             # print post_json_body['requests'][0]
 
-            post_json_body['requests'][0]['image']['source']['imageUri']=thumbnail_url
+            post_json_body['requests'][0]['image']['source']['imageUri'] = thumbnail_url
 
             # print post_json_body['requests'][0]
 
-            post_json_body_string = json.dumps(post_json_body)
-
-            face_response = requests.post(
-                'https://vision.googleapis.com/v1/images:annotate?key='+config.cloudVisionAPI,
-                data=post_json_body_string)
+            response = requests.post(face_api_url, params=params, headers=headers, json={"url": thumbnail_url})
+            faces = response.json()
 
             try:
-                annotations = face_response.json()['responses'][0]['faceAnnotations'][0]
+                annotations = faces[0]['faceAttributes']['emotion']
 
-                joy = likelihood[annotations['joyLikelihood']]
-
-                print title, joy
-            except Exception:
+                print title, max(annotations, key=annotations.get), max(annotations.values())
+                # raw_input()
+                writer.writerow([i['snippet']['title'], i['snippet']['thumbnails']['high']['url']])
+            except (IndexError,UnicodeEncodeError) as e:
+                print i['snippet']['title'], str(e)
                 pass
+            except KeyError:
+                print i['snippet']['title']
+                print faces
+                raw_input()
 
-            writer.writerow([i['snippet']['title'], i['snippet']['thumbnails']['high']['url']])
