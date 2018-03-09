@@ -19,6 +19,24 @@ payload = {"type": "video",
            "pageToken": ""
            }
 
+post_json_body = {
+                "requests": [
+                    {
+                        "image": {
+                            "source": {
+                                "imageUri": ""
+                            }
+                        },
+                        "features": [
+                            {
+                                "type": "FACE_DETECTION",
+                                "maxResults": 1
+                            }
+                        ]
+                    }
+                ]
+            }
+
 with open("results.csv", "wb") as csvfile:
     writer = csv.writer(csvfile, delimiter=',')
 
@@ -31,24 +49,7 @@ with open("results.csv", "wb") as csvfile:
             title = i['snippet']['title']
             thumbnail_url = i['snippet']['thumbnails']['high']['url']
 
-            post_json_body = {
-                "requests": [
-                    {
-                        "image": {
-                            "source": {
-                                "imageUri":
-                                    thumbnail_url
-                            }
-                        },
-                        "features": [
-                            {
-                                "type": "FACE_DETECTION",
-                                "maxResults": 1
-                            }
-                        ]
-                    }
-                ]
-            }
+            post_json_body['requests']['image']['source']['imageUrl']=thumbnail_url
 
             post_json_body = json.dumps(post_json_body)
 
