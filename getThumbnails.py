@@ -1,6 +1,7 @@
 import requests
 import csv
 import json
+import config
 
 likelihood = {"UNKNOWN": 0,
               "VERY_UNLIKELY": 0,
@@ -15,7 +16,7 @@ payload = {"type": "video",
            "order": "date",
            "maxResults": 50,
            "part": "snippet",
-           "key": "AIzaSyBxqrzSWhAdQxI6m_pk_7XTcSzxYctECDs",
+           "key": config.youtubeAPI,
            "pageToken": ""
            }
 
@@ -49,13 +50,17 @@ with open("results.csv", "wb") as csvfile:
             title = i['snippet']['title']
             thumbnail_url = i['snippet']['thumbnails']['high']['url']
 
-            post_json_body['requests']['image']['source']['imageUrl']=thumbnail_url
+            # print post_json_body['requests'][0]
 
-            post_json_body = json.dumps(post_json_body)
+            post_json_body['requests'][0]['image']['source']['imageUri']=thumbnail_url
+
+            # print post_json_body['requests'][0]
+
+            post_json_body_string = json.dumps(post_json_body)
 
             face_response = requests.post(
-                'https://vision.googleapis.com/v1/images:annotate?key=AIzaSyBxqrzSWhAdQxI6m_pk_7XTcSzxYctECDs',
-                data=post_json_body)
+                'https://vision.googleapis.com/v1/images:annotate?key='+config.cloudVisionAPI,
+                data=post_json_body_string)
 
             try:
                 annotations = face_response.json()['responses'][0]['faceAnnotations'][0]
