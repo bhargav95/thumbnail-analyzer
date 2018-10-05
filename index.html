@@ -187,7 +187,6 @@
             restrict: 'A',
             link: function (scope, element, attrs) {
                 $timeout(function () {
-                    console.log("H");
                     $(element).slick(scope.$eval(attrs.slickSlider));
                 }, 1000);
             }
