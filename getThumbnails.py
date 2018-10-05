@@ -1,6 +1,5 @@
 import requests
 import csv
-import json
 import time
 import config
 
@@ -50,7 +49,8 @@ with open("results4.csv", "wb") as csvfile:
     writer.writerow(
         ["title", "image_url", "sadness", "neutral", "contempt", "disgust", "anger", "surprise", "fear", "happiness"])
 
-    for i in range(20):
+    # First twenty pages max
+    for _ in range(20):
 
         r = requests.get('https://www.googleapis.com/youtube/v3/search', params=payload)
 
@@ -68,7 +68,7 @@ with open("results4.csv", "wb") as csvfile:
 
                 flag = False
 
-                while flag != True:
+                while not flag:
                     title = i['snippet']['title']
 
                     if "album review" not in title.lower():

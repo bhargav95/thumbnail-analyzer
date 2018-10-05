@@ -25,11 +25,11 @@ if __name__ == "__main__":
 
         count = 0
 
-        with open("final.csv","wb") as output:
+        with open("final.csv", "wb") as output:
             writer = csv.writer(output, delimiter=',')
             writer.writerow(
                 ["title", "image_url", "sadness", "neutral", "contempt", "disgust", "anger", "surprise", "fear",
-                 "happiness","score"])
+                 "happiness", "score"])
             for emotion in emotions:
                 count += 1
                 print emotion
