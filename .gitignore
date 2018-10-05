@@ -1,4 +1,6 @@
 *.pyc
 config.py
 .idea
+*.csv
 .~lock*
+thumbnailanalysis/
