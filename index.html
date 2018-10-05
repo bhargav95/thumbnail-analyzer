@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Thumbnail Analysis</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="static/css/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="static/css/slick-theme.css"/>
+    <link rel="shortcut icon" href="static/images/favicon-96x96.png">
+</head>
+<style>
+    body {
+        /*background-color: black;*/
+        background-color: #F1EF80;
+        /*font-family: "Roboto", sans-serif;*/
+    }
+
+    .profile {
+        height: 70px;
+    }
+
+    .form-control {
+        width: auto;
+        display: inline-block;
+    }
+
+    [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+        display: none !important;
+    }
+</style>
+</head>
+<body ng-app="myApp" ng-controller="myCtrl">
+
+<div class="container">
+    <h1 class="display-3 font-weight-bold mt-5">
+        <img class="profile"
+             src="https://yt3.ggpht.com/a-/AN66SAyI6-ZfWgVfnvrJwbjxPZqReBpkMtK0neUYKw=s288-mo-c-c0xffffffff-rj-k-no">
+        Thumbnail Analysis: Top 10 theneedledrop Reviews by Emotion
+    </h1>
+    <h3>
+        Analysing Anthony Fantano's face in his thumbnails, using <a
+            href="https://azure.microsoft.com/en-us/services/cognitive-services/">Microsoft Cognitive Services API</a>
+        and <a href="https://developers.google.com/youtube/">Youtube API</a>.
+        <hr>
+    </h3>
+    <h6>
+        Includes 289 album reviews from Sep 20, 2018 to Mar 24, 2011.<br>
+        <a href="https://github.com/bhargav95/thumbnail-analyzer">Source Code</a> |
+        <a href="static/csv/final.csv">Dataset</a> |
+        <a href="https://docs.google.com/spreadsheets/d/1GbGyWVtePH8RZCZd7N3RPDh8m-K6hgO6AyKsAHZpbeQ/edit#gid=0">Ratings
+            Source</a>, thanks to <a href="https://www.reddit.com/user/Opst3r">u/Opst3r</a> |
+        <a href="https://bhargav.io">Portfolio</a>
+    </h6>
+    {% verbatim %}
+    <div class="row" ng-cloak ng-repeat="emotion in emotions">
+        <div class="col-12 my-5">
+
+            <h2 class="font-weight-bold">Top 10 {{ emotion.title }} Reviews</h2>
+            <div class="slicker" slick-slider="{dots: true}">
+                <div ng-repeat="x in ratings | orderBy:emotion.value:true | limitTo:10 | orderBy:emotion.value">
+
+                    <div class="row">
+                        <div class="col-md-6 text-center">
+                            <img class="d-block w-100" ng-src="{{x.image_url}}"
+                                 alt="First slide">
+                            <h1>Score: {{ x. score}}</h1>
+                        </div>
+                        <div class="col-md-6 orange">
+                            <h2>{{ 10-$index }}. {{ x.title }}</h2>
+                            <table class="table">
+                                <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">Emotion</th>
+                                    <th scope="col">Percentage</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <th scope="row">Happiness</th>
+                                    <td ng-class="{'font-weight-bold':(emotion.value=='happiness')}">{{ x.happiness*100
+                                        | number : 2 }}%
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Sadness</th>
+                                    <td ng-class="{'font-weight-bold':(emotion.value=='sadness')}">{{ x.sadness*100 |
+                                        number : 2 }}%
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Contempt</th>
+                                    <td ng-class="{'font-weight-bold':(emotion.value=='contempt')}">{{ x.contempt*100 |
+                                        number : 2 }}%
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Disgust</th>
+                                    <td ng-class="{'font-weight-bold':(emotion.value=='disgust')}">{{ x.disgust*100 |
+                                        number : 2 }}%
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Anger</th>
+                                    <td ng-class="{'font-weight-bold':(emotion.value=='anger')}">{{ x.anger*100 | number
+                                        : 2 }}%
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Surprise</th>
+                                    <td ng-class="{'font-weight-bold':(emotion.value=='surprise')}">{{ x.surprise*100 |
+                                        number : 2 }}%
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Fear</th>
+                                    <td ng-class="{'font-weight-bold':(emotion.value=='fear')}">{{ x.fear*100 | number :
+                                        2 }}%
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Neutral</th>
+                                    <td ng-class="{'font-weight-bold':(emotion.value=='neutral')}">{{ x.neutral*100 |
+                                        number : 2 }}%
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    {% endverbatim %}
+</div>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="static/js/slick.min.js"></script>
+
+<script>
+    var app = angular.module('myApp', []);
+    app.controller('myCtrl', function ($scope, $http) {
+
+        $scope.emotions = [
+            {title: "Happy", value: "happiness"},
+            {title: "Sad", value: "sadness"},
+            {title: "Contempt", value: "contempt"},
+            {title: "Disgust", value: "disgust"},
+            {title: "Fear", value: "fear"},
+            {title: "Angry", value: "anger"},
+            {title: "Surprise", value: "surprise"},
+            {title: "Neutral", value: "neutral"},
+        ];
+
+        $scope.ratings = [];
+
+        $http.get('static/json/ratings.json').then(function (response) {
+
+            console.log(response);
+
+            if (response.status === 200) {
+
+                $scope.ratings = response.data;
+
+                console.log($scope.ratings);
+
+            }
+
+        });
+
+    });
+    app.directive('slickSlider', function ($timeout) {
+        return {
+            restrict: 'A',
+            link: function (scope, element, attrs) {
+                $timeout(function () {
+                    console.log("H");
+                    $(element).slick(scope.$eval(attrs.slickSlider));
+                }, 1000);
+            }
+        }
+    });
+</script>
+<footer class="text-center py-2">
+    <hr>
+    by Bhargav Srinivasan:
+    <a href="https://github.com/bhargav95/thumbnail-analyzer">Source Code</a> |
+        <a href="static/csv/final.csv">Dataset</a> |
+        <a href="https://bhargav.io">Portfolio</a>
+
+</footer>
+</body>
+</html>
