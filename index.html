@@ -7,7 +7,11 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-125499461-1"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
         gtag('js', new Date());
         gtag('config', 'UA-125499461-1');
     </script>
@@ -49,7 +53,8 @@
     </h1>
     <h3>
         Analysing Anthony Fantano's face in his thumbnails, using <a
-            href="https://azure.microsoft.com/en-us/services/cognitive-services/" target="_blank">Microsoft Cognitive Services API</a>
+            href="https://azure.microsoft.com/en-us/services/cognitive-services/" target="_blank">Microsoft Cognitive
+        Services API</a>
         and <a href="https://developers.google.com/youtube/" target="_blank">Youtube API</a>.
         <hr>
     </h3>
@@ -57,7 +62,8 @@
         Includes 289 album reviews from Sep 20, 2018 to Mar 24, 2011.<br>
         <a href="https://github.com/bhargav95/thumbnail-analyzer" target="_blank">Source Code</a> |
         <a href="static/csv/final.csv" target="_blank">Dataset</a> |
-        <a href="https://docs.google.com/spreadsheets/d/1GbGyWVtePH8RZCZd7N3RPDh8m-K6hgO6AyKsAHZpbeQ/edit#gid=0" target="_blank">Ratings
+        <a href="https://docs.google.com/spreadsheets/d/1GbGyWVtePH8RZCZd7N3RPDh8m-K6hgO6AyKsAHZpbeQ/edit#gid=0"
+           target="_blank">Ratings
             Source</a>, thanks to <a href="https://www.reddit.com/user/Opst3r" target="_blank">u/Opst3r</a> |
         <a href="https://bhargav.io" target="_blank">Portfolio</a>
     </h6>
@@ -161,7 +167,6 @@
 <script>
     var app = angular.module('myApp', []);
     app.controller('myCtrl', function ($scope, $http) {
-
         $scope.emotions = [
             {title: "Happy", value: "happiness"},
             {title: "Sad", value: "sadness"},
@@ -172,21 +177,12 @@
             {title: "Surprise", value: "surprise"},
             {title: "Neutral", value: "neutral"},
         ];
-
         $scope.ratings = [];
 
         $http.get('static/json/ratings.json').then(function (response) {
-
-            console.log(response);
-
             if (response.status === 200) {
-
                 $scope.ratings = response.data;
-
-                console.log($scope.ratings);
-
             }
-
         });
 
     });
@@ -205,8 +201,8 @@
     <hr>
     by Bhargav Srinivasan:
     <a href="https://github.com/bhargav95/thumbnail-analyzer" target="_blank">Source Code</a> |
-        <a href="static/csv/final.csv" target="_blank">Dataset</a> |
-        <a href="https://bhargav.io" target="_blank">Portfolio</a>
+    <a href="static/csv/final.csv" target="_blank">Dataset</a> |
+    <a href="https://bhargav.io" target="_blank">Portfolio</a>
 
 </footer>
 </body>
